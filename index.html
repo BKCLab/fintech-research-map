@@ -1114,7 +1114,7 @@ function pageUnit(code) {
   const ids = papersOfUnit.get(code) || new Set(), fin = [...ids].filter(i => isFin(pubById.get(i))).length;
   const memberCodes = u.function === "Đào tạo" ? (u.staffIds || []) : (u.groupMemberIds || u.memberIds || []);
   const members = memberCodes.map(c => personBy.get(c)).filter(Boolean);
-  const peopleLabel = u.function === "Đào tạo" ? "Nhà nghiên cứu có hồ sơ công tác tại đây" : "Thành viên nhóm có hồ sơ";
+  const peopleLabel = u.function === "Đào tạo" ? "Nhà nghiên cứu có thông tin tre  tại đây" : "Thành viên nhóm có hồ sơ";
   const t = tabs("unit", [["cb", `Công bố (${nf(ids.size)})`], ["tv", `${peopleLabel} (${members.length})`], ["pv", "Phạm vi"], ["cd", "Chủ đề"], ["lq", "Đơn vị liên quan"]]);
   let body = "";
   if (t.cur === "cb") body = scopeBar() + paperList(filterIds(ids), { key: "u" + code });
@@ -1303,7 +1303,7 @@ document.addEventListener("click", e => {
   const cloudTopic = e.target.closest("[data-cloud-topic]");
   if (cloudTopic) {
     state.topic = cloudTopic.dataset.cloudTopic;
-    state.fin = "fintech";
+    state.fin = "all";
     state.y1 = P.from; state.y2 = P.to;
     state.school = ""; state.field = ""; state.q = ""; state.scopeGroup = ""; state.applicationArea = ""; state.technology = "";
     if (location.hash.replace(/^#\/?/, "").split("/")[0] === "congbo") render();
