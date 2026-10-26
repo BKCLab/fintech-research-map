@@ -464,6 +464,30 @@ footer{border-top-color:var(--line);color:var(--muted);background:#f7f9fc}
 .technology-matrix td.num{background:#f7f9fd!important;color:var(--ink)!important}
 @media(max-width:700px){.scope-dist-row{grid-template-columns:minmax(110px,1fr) 1fr 70px;gap:7px}.scope-dist-label{font-size:12px}.scope-mini{min-width:160px}}
 
+
+/* Responsive refinements for researcher tables and methodology page */
+.method-content{width:100%;max-width:none}
+@media(max-width:700px){
+  main{padding:18px 14px 42px}
+  .panel.scroll{max-width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch}
+  .people-table-compact{min-width:1040px;table-layout:auto}
+  .people-table-compact th,.people-table-compact td{white-space:normal;vertical-align:top}
+  .people-table-compact .researcher-name-cell{min-width:165px;width:165px;overflow-wrap:normal;word-break:normal}
+  .people-table-compact .org-cell{min-width:150px;width:150px;word-break:normal;overflow-wrap:anywhere}
+  .people-table-compact .school-code-cell{min-width:90px;width:90px;word-break:normal;overflow-wrap:anywhere}
+  .people-table-compact .bar-cell{min-width:190px;width:190px}
+  .people-table-compact td{padding:10px 9px}
+  .ent{grid-template-columns:minmax(0,1fr);gap:14px;align-items:start}
+  .ent>div{min-width:0}
+  .ent .panel{padding:12px}
+  .ent .panel>div{overflow-wrap:anywhere}
+  .ent .kpis{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+  .ent .kpis>div{min-width:0;padding:10px}
+  .ent .ids{display:flex;flex-wrap:wrap;gap:8px}
+  .method-content{width:100%;max-width:none}
+  .method-content h2{margin-top:22px}
+}
+
 </style>
 </head>
 <body>
@@ -1208,7 +1232,7 @@ function pageJourneys() {
 }
 
 function pageMethod() {
-  return `<div style="max-width:820px"><div class="crumb">Phương pháp</div><h1 style="font-size:26px;margin:0 0 10px">Phương pháp</h1>
+  return `<div class="method-content"><div class="crumb">Phương pháp</div><h1 style="font-size:26px;margin:0 0 10px">Phương pháp</h1>
   <h2>Phạm vi công nghệ số trong kinh tế</h2><p>Website sử dụng năm nhóm: <b>① Công nghệ cho kinh tế</b>, <b>② Kinh tế số</b>, <b>③ Công nghệ nền tảng</b>, <b>④ Kinh tế khác</b> và <b>Khác</b> (ví dụ lĩnh vực không thuộc trọng tâm công nghệ–kinh tế).</p>
   <h2>Hành trình nghiên cứu</h2><p>Mỗi chuỗi công bố được gợi ý từ các công bố nhóm ① + ② của cùng một nhà nghiên cứu, cùng nhãn chủ đề và xuất hiện ở ít nhất hai năm khác nhau. Đây là tín hiệu về sự liên tục theo tác giả và chủ đề; quan hệ kế thừa học thuật cần được xác nhận thêm bằng dữ liệu trích dẫn và nội dung bài.</p>
   <h2>Chất lượng dữ liệu của phiên bản này</h2><p>Danh sách khảo sát có 556 nhà khoa học, với các công bố 5 năm gần nhất.</p>
