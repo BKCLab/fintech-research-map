@@ -817,7 +817,7 @@ function buildFintechKeywordCloud() {
 }
 const fintechKeywordCloud = buildFintechKeywordCloud();
 function keywordCloudHtml() {
-  return `<div class="keyword-cloud">${fintechKeywordCloud.map(t => `<button type="button" class="keyword-pill kw${t.tone}" data-cloud-topic="${esc(t.topic)}" style="font-size:${t.size}px" title="Chủ đề OpenAlex: ${esc(t.topic)} · ${t.count} công bố nhóm ① + ②"><span>${esc(t.label)}</span><b>${t.count}</b></button>`).join("")}</div><div class="keyword-cloud-foot">Cỡ chữ thể hiện số công bố nhóm ① + ② được gắn với chủ đề OpenAlex trong giai đoạn ${P.from}–${P.to}. Chọn một chủ đề để xem các bài báo liên quan.</div>`;
+  return `<div class="keyword-cloud">${fintechKeywordCloud.map(t => `<button type="button" class="keyword-pill kw${t.tone}" data-cloud-topic="${esc(t.topic)}" style="font-size:${t.size}px" title="Chủ đề OpenAlex: ${esc(t.topic)} · ${t.count} công bố nhóm ① + ②"><span>${esc(t.label)}</span><b>${t.count}</b></button>`).join("")}</div>`;
 }
 
 /* ---------- expanded research scope: 4 groups + technology/application ---------- */
@@ -882,7 +882,7 @@ function technologyFieldMatrixHtml() {
   return `<div class="matrix-tools"><label for="techSchool">Xem theo trường</label><select id="techSchool">${options}</select></div><div class="scroll"><table class="technology-matrix"><thead><tr><th>Công nghệ / phương pháp</th>${areas.map(a=>`<th>${esc(a)}</th>`).join("")}<th>Tổng</th></tr></thead><tbody>${techs.map(t=>{
     const vals=areas.map(a=>cell.get(`${t}|||${a}`)||0), total=vals.reduce((a,b)=>a+b,0);
     return `<tr><th>${esc(t)}</th>${vals.map((v,i)=>{const strength=v/max;return `<td data-tip="${esc(t)} × ${esc(areas[i])}<br><b>${nf(v)}</b> công bố" style="background:${v?`color-mix(in srgb,var(--brand) ${Math.round(12+strength*72)}%,#ffffff)`:"#f7f9fc"};color:${strength>.65?"#ffffff":"var(--ink)"}">${v?nf(v):"–"}</td>`;}).join("")}<td class="num"><b>${nf(total)}</b></td></tr>`;
-  }).join("")}</tbody></table></div><div class="keyword-cloud-foot">Mỗi ô đếm công bố có cặp công nghệ/phương pháp – lĩnh vực ứng dụng tương ứng. Một bài có thể đóng góp vào nhiều ô.</div>`;
+  }).join("")}</tbody></table></div><div class="keyword-cloud-foot">Một bài có thể đóng góp vào nhiều ô.</div>`;
 }
 function scopeSummaryPanel(ids) {
   const unique = [...new Set(ids)];
@@ -907,33 +907,33 @@ function pageHome() {
   const fieldRows = schools.filter(s => s.papers > 0).map(s => { const v = {}; for (const id of papersOfSchool(s.code)) { const p = pubById.get(id); v[p.fieldClass] = (v[p.fieldClass] || 0) + 1; } return { label: s.code, link: `#/truong/${s.code}`, v }; });
   const top = topPeople(10);
   return `<section class="hero home-hero"><h1 class="home-title">Fintech</h1>
-    <div class="home-deck">Các công bố khoa học, nhà nghiên cứu và xu hướng nghiên cứu Kinh tế số</div>
+    <div class="home-deck">Các nhà nghiên cứu và công bố khoa học trong lĩnh vực Kinh tế số</div>
     <div class="home-search-row">${searchBox()}</div>
     <div class="home-explore"><span>Khám phá theo</span><a href="#/truong">Trường đại học</a><a href="#/nhanghiencuu">Nhà nghiên cứu</a><a href="#/hanhtrinh">Hành trình nghiên cứu</a></div></section>
   <div class="stats">
     <div class="stat"><b>${nf(schools.length)}</b><span>trường, đại học</span></div>
     <div class="stat"><b>${nf(D.units.filter(u => u.kind !== "Trường thành viên").length)}</b><span>đơn vị đào tạo và nghiên cứu</span></div>
-    <div class="stat"><b>${nf(o.verifiedResearchers)}</b><span>hồ sơ nhà nghiên cứu trong dữ liệu</span></div>
+    <div class="stat"><b>${nf(o.verifiedResearchers)}</b><span>nhà nghiên cứu trong dữ liệu</span></div>
     <div class="stat"><b>${nf(o.publications)}</b><span>công bố ${P.from}–${P.to}</span></div>
-    <div class="stat"><b class="g">${nf(o.scopeGroup12Count)}</b><span>công bố thuộc nhóm ① + ② theo NhomPhamVi</span></div>
+    <div class="stat"><b class="g">${nf(o.scopeGroup12Count)}</b><span>công bố nhóm ① Công nghệ cho kinh tế + ② Kinh tế số</span></div>
   </div>
   <h2>Những chủ đề được quan tâm</h2>
   <div class="panel keyword-cloud-panel">${keywordCloudHtml()}</div>
-  <h2>Nhịp điệu công bố qua các năm</h2>
+  <h2>Số lượng công bố qua các năm</h2>
   <div class="grid2"><div class="panel">${legendFin(true)}${stackedYears(all)}</div>
     <div class="panel"><h3>Chỉ công bố nhóm ① + ②</h3>${legendFin(false)}${stackedYears(all.filter(i => isFin(pubById.get(i))), { showOther: false })}</div></div>
   <h2>Công nghệ số trong kinh tế</h2>
   <div class="grid2"><div class="panel"><h3>Phân bố theo phạm vi nghiên cứu</h3>${scopeDistributionHtml()}<div class="scope-summary-total">Tổng cộng <b>${nf(D.publications.length)}</b> công bố</div></div><div class="panel"><h3>Phạm vi theo trường</h3>${scopeBySchoolHtml()}</div></div>
   <div class="panel" style="margin-top:16px"><h3>Công nghệ / phương pháp × lĩnh vực ứng dụng</h3>${technologyFieldMatrixHtml()}</div>
-  <h2>Mỗi trường, một sắc thái nghiên cứu</h2>
+  <h2>Thông tin của từng trường</h2>
   <div class="grid2"><div class="panel">${scatterSchools(sc)}</div>
-    <div class="panel"><h3>Cơ cấu lĩnh vực công bố theo trường</h3>
+    <div class="panel"><h3>Công bố theo trường</h3>
       <div class="legend"><span><i style="background:var(--tech)"></i>Công nghệ</span><span><i style="background:var(--econ)"></i>Kinh tế</span><span><i style="background:var(--inter)"></i>Công nghệ + Kinh tế</span><span><i style="background:var(--misc)"></i>Khác</span></div>
       ${stack100(fieldRows, [{ k: "Công nghệ", l: "Công nghệ", c: "var(--tech)" }, { k: "Kinh tế", l: "Kinh tế", c: "var(--econ)" }, { k: "Công nghệ + Kinh tế", l: "Công nghệ + Kinh tế", c: "var(--inter)" }, { k: "Khác", l: "Khác", c: "var(--misc)" }])}
     </div></div>
-  <h2>Những hướng nghiên cứu theo phạm vi</h2>
+  <h2>Các chủ đề nghiên cứu</h2>
   <div class="panel">${heatmap(topics, all)}</div>
-  <h2>Những kết nối giữa các trường</h2>
+  <h2>Kết nối giữa các trường</h2>
   <div class="panel">${collabMatrix(schools.filter(s => s.papers > 0).map(s => s.code))}</div>
   <h2>Những nhà nghiên cứu đang tạo dấu ấn</h2>
   <div class="scope-legend" aria-label="Chú thích 5 nhóm phạm vi nghiên cứu">${SCOPE_META.map(s => `<div class="scope-legend-item"><i style="background:${s.color}"></i><span><b>${esc(s.label)}</b>${s.key === "other" ? " — Chưa thuộc bốn nhóm trên" : ""}</span></div>`).join("")}</div>
@@ -979,7 +979,7 @@ function peopleTable(rows, { compact = false } = {}) {
   const widths = compact
     ? `<col style="width:27%"><col style="width:13%"><col style="width:8%"><col style="width:39%"><col style="width:13%">`
     : `<col style="width:22%"><col style="width:20%"><col style="width:8%"><col style="width:18%"><col style="width:9%"><col style="width:23%">`;
-  return `<table class="tbl people-table ${compact ? "people-table-compact" : ""}"><colgroup>${widths}</colgroup><thead><tr><th>Nhà nghiên cứu</th><th>${compact ? "Trường công tác" : "Cơ quan công tác"}</th>${compact ? "" : "<th>Mã trường</th><th>Nhóm/đơn vị tham gia</th>"}<th class="num" data-sort="fin">① + ②</th><th aria-label="Cơ cấu NhomPhamVi">Cơ cấu 5 nhóm NhomPhamVi</th><th class="num" data-sort="total">Tổng công bố (${RECENT_START_YEAR}–${P.to})</th></tr></thead><tbody>` +
+  return `<table class="tbl people-table ${compact ? "people-table-compact" : ""}"><colgroup>${widths}</colgroup><thead><tr><th>Nhà nghiên cứu</th><th>${compact ? "Trường công tác" : "Cơ quan công tác"}</th>${compact ? "" : "<th>Mã trường</th><th>Nhóm/đơn vị tham gia</th>"}<th class="num" data-sort="fin">① + ②</th><th aria-label="Cơ cấu NhomPhamVi">Cơ cấu 5 nhóm</th><th class="num" data-sort="total">Tổng (${RECENT_START_YEAR}–${P.to})</th></tr></thead><tbody>` +
     rows.map(x => {
       const homeCode = x.r.institutionCode || "";
       const schoolLink = homeCode && schoolBy.has(homeCode) ? `<a href="#/truong/${encodeURIComponent(homeCode)}" style="color:var(--muted)">${esc(homeCode)}</a>` : "–";
@@ -1055,8 +1055,8 @@ function pageSchools() {
       <td class="scope-cell">${scopeMiniBar(x)}</td>
     </tr>`;
   };
-  return `<div class="crumb">Trường &amp; đơn vị</div><h1 style="font-size:26px;margin:0 0 4px">Trường và đơn vị</h1>
-  <div class="org-table-wrap"><table class="org-table"><colgroup><col class="org-col-name"><col class="org-col-child"><col class="org-col-papers"><col class="org-col-fin"><col class="org-col-rate"><col class="org-col-scope"></colgroup><thead><tr><th>Trường / đơn vị</th><th class="num">Số đơn vị</th><th class="num">Công bố (2021–2026)</th><th class="num">Fintech</th><th class="num">Tỷ lệ nhóm ① + ②</th><th>Phạm vi nghiên cứu</th></tr></thead><tbody>${rows.map(rowHtml).join("")}</tbody></table></div>`;
+  return `<h1 style="font-size:26px;margin:0 0 4px">Trường và đơn vị</h1>
+  <div class="org-table-wrap"><table class="org-table"><colgroup><col class="org-col-name"><col class="org-col-child"><col class="org-col-papers"><col class="org-col-fin"><col class="org-col-rate"><col class="org-col-scope"></colgroup><thead><tr><th>Trường / đơn vị</th><th class="num">Số đơn vị</th><th class="num">Tổng 2021–2026</th><th class="num">Fintech</th><th class="num">Tỷ lệ nhóm ① + ②</th><th>Phạm vi nghiên cứu</th></tr></thead><tbody>${rows.map(rowHtml).join("")}</tbody></table></div>`;
 }
 function unitRow(u) {
   const ids = papersOfUnit.get(u.code) || new Set(), fin = [...ids].filter(i => isFin(pubById.get(i))).length, low = !enough(u);
@@ -1085,7 +1085,7 @@ function pageSchool(code) {
   else body = topicPanels(ids);
   return `<div class="crumb"><a href="#/truong">Trường &amp; đơn vị</a>${s.parentCode ? ` / <a href="#/truong/${s.parentCode}">${esc(schoolBy.get(s.parentCode)?.name || s.parentCode)}</a>` : ""}</div>
   <div class="ent"><div><div class="chips"><span class="chip">${s.parentCode ? "Trường thành viên" : "Trường, đại học"}</span>${covText(s.membersWithData, s.surveyMemberCount)}</div><h1>${esc(s.name)}</h1>
-    <div class="kpis"><div><b>${nf(ids.size)}</b><span>công bố</span></div><div><b style="color:var(--direct)">${nf([...ids].filter(i => isFin(pubById.get(i))).length)}</b><span>công bố nhóm ① + ②</span></div><div><b>${units.filter(u => u.kind !== "Trường thành viên").length}</b><span>đơn vị</span></div><div><b>${people.length}</b><span>hồ sơ nhà nghiên cứu trong dữ liệu</span></div></div></div>
+    <div class="kpis"><div><b>${nf(ids.size)}</b><span>công bố</span></div><div><b style="color:var(--direct)">${nf([...ids].filter(i => isFin(pubById.get(i))).length)}</b><span>công bố nhóm ① + ②</span></div><div><b>${units.filter(u => u.kind !== "Trường thành viên").length}</b><span>đơn vị</span></div><div><b>${people.length}</b><span>nhà nghiên cứu trong dữ liệu</span></div></div></div>
     <div>${sparkHist(ids)}</div></div>${t.html}${body}`;
 }
 function personStat(r) { const ps = papersInRecentWindow(papersOf.get(r.code)); const scopeCounts = Object.fromEntries(SCOPE_META.map(s => [s.key, 0])); for (const p of ps) { const meta = SCOPE_META.find(s => s.label === p.scopeGroup); if (meta) scopeCounts[meta.key]++; } return { r: { ...r, scopeCounts }, total: ps.length, fin: (scopeCounts.pv1 || 0) + (scopeCounts.pv2 || 0), d: scopeCounts.pv1 || 0, ...scopeCounts }; }
@@ -1163,7 +1163,7 @@ function pagePeople() {
   if (state.school) rows = rows.filter(x => x.r.institutionCode === state.school || (schoolBy.get(x.r.institutionCode) || {}).parentCode === state.school);
   if (state.q) { const q = norm(state.q); rows = rows.filter(x => norm([x.r.name, x.r.institutionName, x.r.workUnitName, (x.r.unitNames || []).join(" ")].join(" ")).includes(q)); }
   const k = state.sort.k; rows.sort((a, b) => state.sort.d * ((a[k] - b[k]) || (a.total - b.total)) || a.r.name.localeCompare(b.r.name));
-  return `<div class="crumb">Nhà nghiên cứu</div><h1 style="font-size:28px;margin:0 0 8px">Nhà nghiên cứu</h1>
+  return `<h1 style="font-size:28px;margin:0 0 8px">Nhà nghiên cứu</h1>
   <div class="chips" style="margin-bottom:12px"><input type="text" id="pq" placeholder="Tìm theo tên" value="${esc(state.q)}" style="font:inherit;padding:6px 10px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--ink);min-width:220px">
    <button class="chip ${!state.school ? "on" : ""}" data-school="">Tất cả</button>${schools.map(s => `<button class="chip ${state.school === s.code ? "on" : ""}" data-school="${s.code}">${s.code}</button>`).join("")}</div>
   <div class="panel scroll">${peopleTable(rows.slice(0, state.more.people || 60))}${rows.length > (state.more.people || 60) ? `<button class="more" data-more="people" data-step="60">Xem thêm (còn ${rows.length - (state.more.people || 60)})</button>` : ""}</div>`;
@@ -1182,7 +1182,7 @@ function pagePapers() {
   const areas = [...new Set(D.publications.flatMap(p => p.applicationAreas || []))].sort((a,b)=>a.localeCompare(b,"vi"));
   const technologies = [...new Set(D.publications.flatMap(p => p.leadTechnologies || []))].sort((a,b)=>a.localeCompare(b,"vi"));
   const scopeOptions = SCOPE_META.map(s => [s.label, s.label]);
-  return `<div class="crumb">Công bố</div><h1 style="font-size:26px;margin:0 0 16px">Công bố</h1>
+  return `<h1 style="font-size:26px;margin:0 0 16px">Công bố</h1>
   <div class="lay"><aside class="side">
     <h4>Tìm kiếm</h4><input type="text" id="fq" placeholder="Tên bài, tác giả, DOI, nguồn" value="${esc(state.q)}">
     <h4>Năm</h4><div class="yr">${sel("y1", [["all", "–"], ...PUBLICATION_YEARS.map(y => [y, y])], state.y1)}<span>–</span>${sel("y2", PUBLICATION_YEARS.map(y => [y, y]), state.y2)}</div>
@@ -1240,8 +1240,8 @@ function pageJourneys() {
   const researcherCount = new Set(candidates.map(j => j.researcher.code)).size;
   const paperCount = new Set(candidates.flatMap(j => j.visiblePapers.map(p => p.id))).size;
   const yearSel = (id, cur) => `<select id="${id}">${YEARS.map(y => `<option value="${y}" ${y === Number(cur) ? "selected" : ""}>${y}</option>`).join("")}</select>`;
-  return `<div class="crumb"><a href="#/">Tổng quan</a> / Hành trình nghiên cứu</div>
-  <section class="hero"><h1>Hành trình nghiên cứu</h1><p>Khám phá những hướng Fintech mà một nhà nghiên cứu theo đuổi qua nhiều năm — thay vì chỉ xem các chủ đề và bài báo rời rạc.</p></section>
+  return `
+  <section class="hero"><h1>Hành trình nghiên cứu</h1><p>Khám phá những hướng Fintech mà một nhà nghiên cứu theo đuổi qua nhiều năm</p></section>
   <div class="stats"><div class="stat"><b>${nf(researchJourneys.length)}</b><span>chuỗi tiềm năng trong dữ liệu</span></div><div class="stat"><b>${nf(new Set(researchJourneys.map(j => j.researcher.code)).size)}</b><span>nhà nghiên cứu có chuỗi</span></div><div class="stat"><b>${nf(candidates.length)}</b><span>chuỗi sau khi lọc</span></div><div class="stat"><b class="g">${nf(paperCount)}</b><span>công bố xuất hiện trong kết quả</span></div></div>
   
   <h2>Tìm một hướng nghiên cứu</h2>
@@ -1370,7 +1370,7 @@ let qt; document.addEventListener("input", e => {
   if (e.target.id === "journey-q") { const pos = e.target.selectionStart; state.journeyQ = e.target.value; render(); const el = document.getElementById("journey-q"); if (el) { el.focus(); el.setSelectionRange(pos, pos); } return; }
   if (e.target.id === "fq" || e.target.id === "pq") { clearTimeout(qt); const id = e.target.id, pos = e.target.selectionStart; qt = setTimeout(() => { state.q = e.target.value; render(); const el = document.getElementById(id); if (el) { el.focus(); el.setSelectionRange(pos, pos); } }, 250); }
 });
-$("#foot").innerHTML = `Dữ liệu: OpenAlex, xác minh bởi nhóm khảo sát – Viện Công nghệ và Kinh tế số, ĐHBK Hà Nội. Cập nhật ${esc(D.manifest.sourceRunAt || D.manifest.dataVersion)}. <a href="#/phuongphap">Phương pháp</a>`;
+$("#foot").innerHTML = `Dữ liệu: OpenAlex và ORCID, xác minh bởi nhóm khảo sát của Viện Công nghệ và Kinh tế số, ĐHBK Hà Nội. Cập nhật ${esc(D.manifest.sourceRunAt || D.manifest.dataVersion)}. <a href="#/phuongphap">Phương pháp</a>`;
 render();
 </script>
 </body>
